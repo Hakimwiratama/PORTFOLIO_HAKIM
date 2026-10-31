@@ -87,7 +87,7 @@
       color: var(--text) !important;
     }
     .video-controls { display: flex; align-items: center; gap: 8px; }
-    .video-action {
+    .video-choice {
       border: 1px solid var(--line);
       border-radius: 999px;
       padding: 10px 13px;
@@ -97,9 +97,8 @@
       cursor: pointer;
       transition: border-color .2s ease, color .2s ease;
     }
-    .video-action:hover { border-color: var(--accent); color: var(--accent); }
+    .video-choice:hover, .video-choice:focus-visible { border-color: var(--accent); color: var(--accent); }
     .video-status { max-width: 150px; color: var(--muted); font-size: 10px; }
-    .video-file-input { display: none; }
     .menu-toggle {
       display: none;
       border: 1px solid var(--line);
@@ -167,24 +166,11 @@
     .fact strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 12px; font-weight: 600; }
     .fact span { color: var(--muted); font-size: 11px; }
 
-    .projects { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-    .project { overflow: hidden; border: 1px solid var(--line); background: rgba(21,21,21,.84); transition: border-color .25s ease, transform .25s ease; }
-    .project:hover { transform: translateY(-5px); border-color: rgba(214,243,106,.45); }
-    .project-visual { position: relative; display: grid; min-height: 290px; place-items: center; overflow: hidden; }
-    .project-visual::before { position: absolute; inset: 0; content: ""; transition: transform .5s ease; }
-    .project:hover .project-visual::before { transform: scale(1.04); }
-    .visual-one::before { background: radial-gradient(ellipse at 60% 40%, #6f7d54 0, transparent 36%), linear-gradient(130deg, #32392d, #171a16 68%); }
-    .visual-two::before { background: radial-gradient(ellipse at 50% 55%, rgba(231,179,129,.65), transparent 24%), linear-gradient(140deg, #51352f, #251f20 72%); }
-    .visual-three::before { background: radial-gradient(ellipse at 40% 45%, rgba(111,143,150,.55), transparent 32%), linear-gradient(140deg, #28353a, #15191c 70%); }
-    .visual-four::before { background: radial-gradient(ellipse at 64% 55%, rgba(205,209,132,.55), transparent 26%), linear-gradient(140deg, #3d3926, #181915 72%); }
-    .visual-shape { position: relative; z-index: 1; display: grid; width: 150px; height: 190px; place-items: center; border: 1px solid rgba(255,255,255,.42); background: linear-gradient(145deg, rgba(255,255,255,.23), rgba(255,255,255,.025)); box-shadow: 0 24px 70px rgba(0,0,0,.32); color: rgba(255,255,255,.8); font-family: var(--serif); font-size: 35px; transform: rotate(-7deg); }
-    .visual-two .visual-shape { width: 190px; height: 130px; border-radius: 3px; transform: rotate(5deg); }
-    .visual-three .visual-shape { width: 130px; height: 185px; border-radius: 20px; transform: rotate(6deg); }
-    .visual-four .visual-shape { width: 170px; height: 170px; border-radius: 50%; transform: rotate(-12deg); }
-    .project-info { display: flex; align-items: start; justify-content: space-between; gap: 15px; padding: 20px 21px; }
-    .project-info h3 { margin: 0 0 7px; font-size: 15px; font-weight: 500; }
-    .project-info p { margin: 0; color: var(--muted); font-size: 11px; }
-    .project-number { color: var(--accent); font-family: var(--serif); font-size: 13px; }
+    .projects-empty { display: grid; min-height: 240px; place-content: center; justify-items: center; gap: 14px; border: 1px dashed var(--line); padding: 30px 22px; background: rgba(21,21,21,.48); text-align: center; }
+    .projects-empty-mark { display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid rgba(214,243,106,.3); border-radius: 50%; color: var(--accent); font-family: var(--serif); font-size: 20px; }
+    .projects-empty h3 { margin: 0; font-size: 18px; font-weight: 500; }
+    .projects-empty p { max-width: 360px; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.8; }
+    .projects-empty .button { margin-top: 4px; }
 
     .services { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
     .service { padding: 27px 24px 20px 0; }
@@ -206,8 +192,10 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
       .reveal { opacity: 1; transform: none; }
+      .project.reveal:nth-child(2), .project.reveal:nth-child(3) { transition-delay: 0s; }
     }
     @media (max-width: 900px) {
+      .projects { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .nav { min-height: 68px; }
       .menu-toggle { display: block; }
       .nav-links {
@@ -238,8 +226,7 @@
       .section { padding-block: 76px; }
       .section-heading { align-items: flex-start; flex-direction: column; margin-bottom: 32px; }
       .about-grid { grid-template-columns: 1fr; gap: 23px; }
-      .projects { grid-template-columns: 1fr; }
-      .project-visual { min-height: 260px; }
+      .projects { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
       .services { grid-template-columns: 1fr; }
       .service, .service + .service { border-left: 0; border-bottom: 1px solid var(--line); padding: 22px 0; }
       .service h3 { margin-top: 19px; }
@@ -257,7 +244,6 @@
 <body>
   <div class="video-background" aria-hidden="true">
     <video id="backgroundVideo" autoplay muted loop playsinline>
-      <source src="hakim-background.mp4" type="video/mp4">
     </video>
   </div>
   <header class="topbar">
@@ -267,11 +253,16 @@
       <div class="nav-links">
         <a href="#tentang">Tentang</a>
         <a href="#karya">Karya</a>
+        <a href="projects.html">Proyek saya ↗</a>
         <a href="#layanan">Layanan</a>
         <div class="video-controls">
-          <input class="video-file-input" id="videoFileInput" type="file" accept="video/*">
-          <button class="video-action" id="chooseVideo" type="button">Pilih video latar</button>
-          <button class="video-action" id="removeVideo" type="button" hidden>Hapus video</button>
+          <label class="video-status" for="backgroundChoice">Latar</label>
+          <select class="video-choice" id="backgroundChoice" aria-label="Pilih latar belakang">
+            <option value="iblis">Iblis</option>
+            <option value="kesendirian">Kesendirian</option>
+            <option value="malam">Pemandagan Malam</option>
+            <option value="plain">Gelap polos</option>
+          </select>
           <span class="video-status" id="videoStatus" role="status" aria-live="polite"></span>
         </div>
         <a class="nav-cta" href="#kontak">Hubungi saya ↗</a>
@@ -319,26 +310,14 @@
     <section class="section" id="karya">
       <div class="shell">
         <div class="section-heading reveal">
-          <div><span class="eyebrow">Pilihan karya</span><h2>Ruang eksplorasi.</h2></div>
-          <p>Beberapa konsep dan eksplorasi visual. Ganti bagian ini dengan proyek asli dan tautan karya kamu.</p>
+          <div><span class="eyebrow">Selected projects</span><h2>Ruang Eksplorasi.</h2></div>
+          <p>Kumpulan proyek dan karya digital yang mencerminkan proses belajar, kreativitas, serta perjalanan saya dalam dunia teknologi.</p>
         </div>
-        <div class="projects">
-          <article class="project reveal">
-            <div class="project-visual visual-one"><div class="visual-shape">01</div></div>
-            <div class="project-info"><div><h3>Ruang Tumbuh</h3><p>Konsep identitas digital · 2025</p></div><span class="project-number">01</span></div>
-          </article>
-          <article class="project reveal">
-            <div class="project-visual visual-two"><div class="visual-shape">STUDIO</div></div>
-            <div class="project-info"><div><h3>Studio Senja</h3><p>Eksplorasi landing page · 2025</p></div><span class="project-number">02</span></div>
-          </article>
-          <article class="project reveal">
-            <div class="project-visual visual-three"><div class="visual-shape">H</div></div>
-            <div class="project-info"><div><h3>Hari Ini</h3><p>Konsep antarmuka aplikasi · 2024</p></div><span class="project-number">03</span></div>
-          </article>
-          <article class="project reveal">
-            <div class="project-visual visual-four"><div class="visual-shape">HW</div></div>
-            <div class="project-info"><div><h3>Eksperimen Bentuk</h3><p>Eksplorasi visual · 2024</p></div><span class="project-number">04</span></div>
-          </article>
+        <div class="projects-empty reveal">
+          <span class="projects-empty-mark" aria-hidden="true">+</span>
+          <h3>Belum ada proyek yang ditampilkan</h3>
+          <p>Tambahkan karya asli melalui halaman Proyek Saya. Proyek akan muncul di sini setelah kamu memasukkannya.</p>
+          <a class="button" href="projects.html">Tambah proyek <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </section>
@@ -378,162 +357,90 @@
   <script>
     const menuButton = document.querySelector(".menu-toggle");
     const navLinks = document.querySelector(".nav-links");
-    const videoInput = document.querySelector("#videoFileInput");
-    const chooseVideoButton = document.querySelector("#chooseVideo");
-    const removeVideoButton = document.querySelector("#removeVideo");
+    const backgroundChoice = document.querySelector("#backgroundChoice");
     const videoStatus = document.querySelector("#videoStatus");
     const videoBackground = document.querySelector(".video-background");
     const backgroundVideo = document.querySelector("#backgroundVideo");
-    const databaseName = "hakim-portfolio";
-    const videoStoreName = "settings";
-    const videoRecordKey = "background-video";
-    let currentVideoUrl = null;
+    const backgroundPreferenceKey = "hakim-portfolio-background-choice";
+    const backgroundVideos = {
+      iblis: "iblis.mp4",
+      kesendirian: "Kesendirian.mp4",
+      malam: "Pemandagan%20Malam.mp4"
+    };
+    backgroundVideo.muted = true;
+    backgroundVideo.volume = 0;
 
     function setVideoStatus(message) {
       videoStatus.textContent = message;
     }
 
-    function openVideoDatabase() {
-      return new Promise((resolve, reject) => {
-        const request = indexedDB.open(databaseName, 1);
-        request.onupgradeneeded = () => request.result.createObjectStore(videoStoreName);
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error || new Error("Database video tidak dapat dibuka."));
-      });
-    }
+    function selectBackground(choice) {
+      if (choice === "plain") {
+        backgroundVideo.pause();
+        backgroundVideo.removeAttribute("src");
+        backgroundVideo.load();
+        videoBackground.classList.remove("has-video");
+        setVideoStatus("Latar gelap polos aktif");
+        return;
+      }
 
-    function storeVideo(file) {
-      return openVideoDatabase().then((database) => new Promise((resolve, reject) => {
-        const transaction = database.transaction(videoStoreName, "readwrite");
-        transaction.objectStore(videoStoreName).put(file, videoRecordKey);
-        transaction.oncomplete = () => {
-          database.close();
-          resolve();
-        };
-        transaction.onerror = () => {
-          database.close();
-          reject(transaction.error || new Error("Video tidak dapat disimpan."));
-        };
-        transaction.onabort = () => {
-          database.close();
-          reject(transaction.error || new Error("Penyimpanan video dibatalkan."));
-        };
-      }));
-    }
+      const source = backgroundVideos[choice];
+      if (!source) {
+        setVideoStatus("Pilihan latar tidak tersedia.");
+        return;
+      }
 
-    function readStoredVideo() {
-      return openVideoDatabase().then((database) => new Promise((resolve, reject) => {
-        const transaction = database.transaction(videoStoreName, "readonly");
-        const request = transaction.objectStore(videoStoreName).get(videoRecordKey);
-        request.onsuccess = () => resolve({ database, video: request.result || null });
-        request.onerror = () => {
-          database.close();
-          reject(request.error || new Error("Video tersimpan tidak dapat dibaca."));
-        };
-        transaction.onabort = () => {
-          database.close();
-          reject(transaction.error || new Error("Pembacaan video dibatalkan."));
-        };
-      }));
-    }
-
-    function deleteStoredVideo() {
-      return openVideoDatabase().then((database) => new Promise((resolve, reject) => {
-        const transaction = database.transaction(videoStoreName, "readwrite");
-        transaction.objectStore(videoStoreName).delete(videoRecordKey);
-        transaction.oncomplete = () => {
-          database.close();
-          resolve();
-        };
-        transaction.onerror = () => {
-          database.close();
-          reject(transaction.error || new Error("Video tersimpan tidak dapat dihapus."));
-        };
-        transaction.onabort = () => {
-          database.close();
-          reject(transaction.error || new Error("Penghapusan video dibatalkan."));
-        };
-      }));
-    }
-
-    function showBackgroundVideo(file) {
-      if (currentVideoUrl) URL.revokeObjectURL(currentVideoUrl);
-      currentVideoUrl = URL.createObjectURL(file);
-      backgroundVideo.src = currentVideoUrl;
+      backgroundVideo.src = source;
       backgroundVideo.load();
       videoBackground.classList.add("has-video");
-      removeVideoButton.hidden = false;
+      setVideoStatus("Memuat video latar...");
     }
 
     backgroundVideo.addEventListener("loadeddata", () => {
-      if (currentVideoUrl && backgroundVideo.src !== currentVideoUrl) return;
+      if (backgroundChoice.value === "plain") return;
+      backgroundVideo.muted = true;
+      backgroundVideo.volume = 0;
       backgroundVideo.play().then(() => {
-        setVideoStatus(currentVideoUrl ? "Video latar aktif" : "Video latar bawaan aktif");
+        setVideoStatus(`${backgroundChoice.selectedOptions[0].textContent} aktif tanpa suara`);
       }).catch(() => {
-        setVideoStatus("Video siap, tetapi gagal diputar otomatis. Coba klik halaman.");
+        setVideoStatus("Video siap, tetapi gagal diputar otomatis.");
       });
     });
 
     backgroundVideo.addEventListener("error", () => {
-      if (currentVideoUrl && backgroundVideo.src !== currentVideoUrl) return;
+      if (backgroundChoice.value === "plain") return;
       videoBackground.classList.remove("has-video");
-      setVideoStatus(currentVideoUrl
-        ? "Video tidak dapat diputar. Coba format MP4 atau WebM."
-        : "Video bawaan gagal diputar. Klik Pilih video latar untuk memilih file.");
+      setVideoStatus("Video latar tidak dapat diputar.");
     });
 
-    chooseVideoButton.addEventListener("click", () => videoInput.click());
-
-    videoInput.addEventListener("change", async () => {
-      const file = videoInput.files[0];
-      videoInput.value = "";
-      if (!file) return;
-      if (!file.type.startsWith("video/")) {
-        setVideoStatus("Pilih file video yang valid.");
-        return;
+    let backgroundPreferenceError = "";
+    try {
+      const savedChoice = localStorage.getItem(backgroundPreferenceKey);
+      const savedChoiceMigration = {
+        nature: "iblis",
+        "video-15-08-37": "kesendirian",
+        "video-15-08-32": "malam"
+      };
+      const choice = savedChoiceMigration[savedChoice] || savedChoice;
+      if (choice === "plain" || Object.prototype.hasOwnProperty.call(backgroundVideos, choice)) {
+        backgroundChoice.value = choice;
+        if (choice !== savedChoice) localStorage.setItem(backgroundPreferenceKey, choice);
       }
+    } catch (error) {
+      backgroundPreferenceError = `Pilihan latar tersimpan tidak dapat dibaca: ${error.message}`;
+    }
 
-      showBackgroundVideo(file);
-      setVideoStatus("Menyimpan video...");
+    backgroundChoice.addEventListener("change", () => {
       try {
-        await storeVideo(file);
-        setVideoStatus("Video aktif dan tersimpan di browser");
+        localStorage.setItem(backgroundPreferenceKey, backgroundChoice.value);
+        selectBackground(backgroundChoice.value);
       } catch (error) {
-        setVideoStatus(`Video aktif, tetapi gagal disimpan: ${error.message}`);
+        selectBackground(backgroundChoice.value);
+        setVideoStatus(`Latar aktif, tetapi pilihan gagal disimpan: ${error.message}`);
       }
     });
-
-    removeVideoButton.addEventListener("click", async () => {
-      setVideoStatus("Menghapus video...");
-      try {
-        await deleteStoredVideo();
-        backgroundVideo.pause();
-        backgroundVideo.removeAttribute("src");
-        const bundledVideoSource = backgroundVideo.querySelector("source");
-        if (bundledVideoSource) bundledVideoSource.remove();
-        backgroundVideo.load();
-        videoBackground.classList.remove("has-video");
-        removeVideoButton.hidden = true;
-        if (currentVideoUrl) URL.revokeObjectURL(currentVideoUrl);
-        currentVideoUrl = null;
-        setVideoStatus("Video latar dihapus");
-      } catch (error) {
-        setVideoStatus(`Video gagal dihapus: ${error.message}`);
-      }
-    });
-
-    readStoredVideo().then(({ database, video }) => {
-      database.close();
-      if (video) {
-        showBackgroundVideo(video);
-        setVideoStatus("Memuat video tersimpan...");
-        return;
-      }
-      videoBackground.classList.add("has-video");
-      setVideoStatus("Video latar bawaan aktif");
-    }).catch((error) => {
-      setVideoStatus(`Video tersimpan tidak dapat dimuat: ${error.message}`);
-    });
+    selectBackground(backgroundChoice.value);
+    if (backgroundPreferenceError) setVideoStatus(backgroundPreferenceError);
 
     menuButton.addEventListener("click", () => {
       const isOpen = navLinks.classList.toggle("open");

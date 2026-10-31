@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101010">
+  <meta name="description" content="Kumpulan proyek dan teknologi yang digunakan oleh Hakim Wiratama.">
+  <title>Proyek Saya — Hakim Wiratama</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101010;
+      --text: #f3f0e9;
+      --muted: #92918d;
+      --line: rgba(243, 240, 233, .13);
+      --accent: #d6f36a;
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: "Segoe UI", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--bg); }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
+    .video-background { position: fixed; z-index: 0; inset: 0; overflow: hidden; background: var(--bg); pointer-events: none; }
+    .video-background video { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .5s ease; }
+    .video-background.has-video video { opacity: .72; }
+    .video-background::after { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(12,12,12,.67), rgba(12,12,12,.52) 50%, rgba(12,12,12,.72)); content: ""; }
+    main, footer { position: relative; z-index: 1; }
+    .shell { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
+    .topbar { position: sticky; z-index: 5; top: 0; border-bottom: 1px solid var(--line); background: rgba(16,16,16,.88); backdrop-filter: blur(16px); }
+    .nav { display: flex; min-height: 76px; align-items: center; justify-content: space-between; }
+    .brand { font-size: 15px; font-weight: 700; letter-spacing: -.04em; }
+    .brand span { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 30px; }
+    .nav-links a { color: #c2c0bb; font-size: 12px; transition: color .2s ease; }
+    .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--accent); }
+    .nav-cta { border: 1px solid var(--line); border-radius: 999px; padding: 11px 17px; color: var(--text) !important; }
+    .menu-toggle { display: none; width: 42px; height: 42px; border: 1px solid var(--line); border-radius: 50%; background: transparent; color: var(--text); cursor: pointer; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+    .eyebrow::before { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); content: ""; }
+    .hero { display: flex; min-height: 425px; flex-direction: column; align-items: flex-start; justify-content: center; padding-block: 75px; }
+    h1 { max-width: 800px; margin: 24px 0 20px; font-size: clamp(52px, 8vw, 94px); font-weight: 500; letter-spacing: -.085em; line-height: .96; }
+    h1 span { color: var(--accent); font-family: var(--serif); font-weight: 400; font-style: italic; }
+    .hero p { max-width: 540px; margin: 0; color: #aaa8a2; font-size: 14px; line-height: 1.85; }
+    .section { padding-block: 82px; border-top: 1px solid var(--line); }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 35px; }
+    h2 { margin: 15px 0 0; font-size: clamp(34px, 5vw, 54px); font-weight: 500; letter-spacing: -.065em; line-height: 1; }
+    .section-heading > p { max-width: 355px; margin: 0 0 3px; color: var(--muted); font-size: 12px; line-height: 1.8; }
+    .project-layout { display: grid; grid-template-columns: minmax(260px, .75fr) 1.25fr; align-items: start; gap: 34px; }
+    .editor-column { display: grid; align-self: start; gap: 14px; }
+    .project-form { display: grid; gap: 17px; border: 1px solid var(--line); padding: 24px; background: rgba(21,21,21,.88); }
+    .project-form h3 { margin: 0 0 2px; font-size: 17px; font-weight: 500; }
+    .project-form[hidden] { display: none; }
+    .field { display: grid; gap: 8px; }
+    .field label { color: #d5d2ca; font-size: 11px; }
+    .field input, .field textarea { width: 100%; border: 1px solid var(--line); border-radius: 2px; padding: 12px 13px; outline: none; background: rgba(10,10,10,.65); color: var(--text); font-size: 12px; }
+    .field textarea { min-height: 82px; resize: vertical; }
+    .field input:focus, .field textarea:focus { border-color: var(--accent); }
+    .field small { color: var(--muted); font-size: 10px; line-height: 1.6; }
+    .button { display: inline-flex; min-height: 46px; align-items: center; justify-content: center; gap: 10px; border: 1px solid var(--accent); border-radius: 999px; padding: 0 19px; background: var(--accent); color: #171a0c; font-size: 12px; font-weight: 700; cursor: pointer; transition: transform .2s ease, background .2s ease; }
+    .button:hover { transform: translateY(-2px); background: #e4ff8c; }
+    .form-status { min-height: 18px; margin: 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
+    .form-status.error { color: #ff9a8b; }
+    .project-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+    .project-card { display: flex; min-height: 230px; flex-direction: column; justify-content: space-between; border: 1px solid var(--line); padding: 22px; background: linear-gradient(145deg, rgba(40,45,33,.88), rgba(21,21,21,.92) 68%); transition: transform .25s ease, border-color .25s ease; }
+    .project-card:nth-child(4n + 2) { background: linear-gradient(145deg, rgba(63,43,38,.85), rgba(21,21,21,.94) 68%); }
+    .project-card:nth-child(4n + 3) { background: linear-gradient(145deg, rgba(36,52,55,.85), rgba(21,21,21,.94) 68%); }
+    .project-card:nth-child(4n + 4) { background: linear-gradient(145deg, rgba(60,55,34,.85), rgba(21,21,21,.94) 68%); }
+    .project-card:hover { transform: translateY(-4px); border-color: rgba(214,243,106,.48); }
+    .project-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .project-number { color: var(--accent); font-family: var(--serif); font-size: 13px; }
+    .project-card h3 { margin: 0 0 10px; font-size: 18px; font-weight: 500; }
+    .project-card p { margin: 0; color: #aaa8a2; font-size: 11px; line-height: 1.7; overflow-wrap: anywhere; }
+    .project-tech { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 17px; }
+    .tech-tag { border: 1px solid var(--line); border-radius: 999px; padding: 6px 9px; color: #d5d2ca; font-size: 9px; }
+    .project-card-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 23px; }
+    .open-project { color: var(--accent); font-size: 11px; }
+    .remove-project { border: 0; padding: 5px 0; background: transparent; color: var(--muted); font-size: 10px; cursor: pointer; }
+    .remove-project:hover { color: #ff9a8b; }
+    .empty-state { grid-column: 1 / -1; display: grid; min-height: 230px; place-content: center; border: 1px dashed var(--line); padding: 24px; text-align: center; }
+    .empty-state strong { margin-bottom: 8px; font-size: 14px; font-weight: 500; }
+    .empty-state span { color: var(--muted); font-size: 11px; line-height: 1.7; }
+    .tools-section { overflow: hidden; }
+    .marquee { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+    .marquee + .marquee { margin-top: 13px; }
+    .marquee-track { display: flex; width: max-content; animation: marquee-left 48s linear infinite; }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+    .marquee-track.slow { animation-duration: 55s; }
+    .marquee-group { display: flex; flex: none; gap: 12px; padding-right: 12px; }
+    .tool-chip { display: inline-flex; min-height: 68px; align-items: center; gap: 12px; border: 1px solid var(--line); padding: 0 16px; background: rgba(21,21,21,.85); color: #dedbd3; white-space: nowrap; }
+    .tool-chip > span { color: var(--accent); font-family: var(--serif); font-size: 16px; }
+    .tool-chip-copy { display: grid; gap: 4px; }
+    .tool-chip strong { font-size: 11px; font-weight: 500; }
+    .tool-chip small { color: var(--muted); font-size: 9px; }
+    @keyframes marquee-left { to { transform: translateX(-50%); } }
+    footer { display: flex; min-height: 75px; align-items: center; justify-content: space-between; gap: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
+    footer a:hover { color: var(--accent); }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+      .marquee-track { transform: none; }
+    }
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 36px, 540px); }
+      .nav { min-height: 68px; }
+      .menu-toggle { display: block; }
+      .nav-links { position: absolute; top: 68px; right: 18px; left: 18px; display: none; align-items: stretch; gap: 0; border: 1px solid var(--line); padding: 10px 18px; background: #171717; }
+      .nav-links.open { display: flex; flex-direction: column; }
+      .nav-links a { padding: 14px 0; }
+      .nav-links .nav-cta { margin-block: 8px; padding: 12px 15px; text-align: center; }
+      .hero { min-height: 360px; padding-block: 65px; }
+      .section { padding-block: 64px; }
+      .section-heading { align-items: flex-start; flex-direction: column; gap: 15px; margin-bottom: 27px; }
+      .project-layout { grid-template-columns: 1fr; gap: 22px; }
+    }
+    @media (max-width: 520px) {
+      .project-list { grid-template-columns: 1fr; }
+      .project-card { min-height: 205px; }
+      footer { align-items: flex-start; flex-direction: column; justify-content: center; padding-block: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="video-background" aria-hidden="true">
+    <video id="backgroundVideo" autoplay muted loop playsinline></video>
+  </div>
+  <header class="topbar">
+    <nav class="nav shell" aria-label="Navigasi utama">
+      <a class="brand" href="index.html">HAKIM<span>.</span></a>
+      <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false">☰</button>
+      <div class="nav-links">
+        <a href="index.html">Beranda</a>
+        <a href="#daftar-proyek" aria-current="page">Proyek saya</a>
+        <a href="#teknologi">Teknologi</a>
+        <a class="nav-cta" href="index.html#kontak">Hubungi saya ↗</a>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section class="hero shell">
+      <span class="eyebrow">Karya pilihan · Hakim Wiratama</span>
+      <h1>Proyek yang<br><span>saya kerjakan.</span></h1>
+      <p>Tempat untuk melihat proyek, tautan yang bisa dibuka, dan teknologi yang saya gunakan. Tambahkan proyekmu melalui formulir di bawah.</p>
+    </section>
+
+    <section class="section" id="daftar-proyek">
+      <div class="shell">
+        <div class="section-heading">
+          <div><span class="eyebrow">Kumpulan karya</span><h2>Proyek saya.</h2></div>
+          <p>Masukkan alamat website atau repositori proyek. Tautannya akan terbuka di tab baru dan tersimpan di browser ini.</p>
+        </div>
+        <div class="project-layout">
+          <div class="editor-column">
+            <form class="project-form" id="projectUnlockForm">
+              <h3>Masuk untuk mengelola proyek</h3>
+              <div class="field">
+                <label for="projectPassword">Sandi</label>
+                <input id="projectPassword" name="password" type="password" inputmode="numeric" maxlength="8" autocomplete="current-password" placeholder="Masukkan sandi" required>
+              </div>
+              <button class="button" type="submit">Buka akses <span aria-hidden="true">↗</span></button>
+              <p class="form-status" id="unlockStatus" role="status" aria-live="polite"></p>
+            </form>
+            <form class="project-form" id="projectForm" hidden>
+              <h3>Tambah proyek baru</h3>
+              <div class="field">
+                <label for="projectName">Nama proyek</label>
+                <input id="projectName" name="name" type="text" maxlength="70" placeholder="Contoh: Website Toko Online" required>
+              </div>
+              <div class="field">
+                <label for="projectUrl">Link proyek</label>
+                <input id="projectUrl" name="url" type="url" placeholder="https://websitekamu.com" required>
+                <small>Gunakan link website atau repositori yang diawali https:// atau http://.</small>
+              </div>
+              <div class="field">
+                <label for="projectDescription">Deskripsi singkat</label>
+                <textarea id="projectDescription" name="description" maxlength="180" placeholder="Ceritakan sedikit tentang proyek ini"></textarea>
+              </div>
+              <div class="field">
+                <label for="projectTech">Teknologi yang digunakan</label>
+                <input id="projectTech" name="technologies" type="text" maxlength="160" placeholder="HTML, CSS, JavaScript">
+                <small>Pisahkan setiap teknologi dengan koma.</small>
+              </div>
+              <button class="button" type="submit">Simpan proyek <span aria-hidden="true">↗</span></button>
+              <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+          <div class="project-list" id="projectList" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tools-section" id="teknologi">
+      <div class="shell">
+        <div class="section-heading">
+          <div><span class="eyebrow">Perangkat kreatif</span><h2>Teknologi & alat.</h2></div>
+          <p>Beberapa bahasa, aplikasi, dan alat coding yang saya gunakan. Berjalan perlahan dari kanan ke kiri.</p>
+        </div>
+      </div>
+      <div class="marquee" aria-label="Teknologi dan alat yang digunakan">
+        <div class="marquee-track" id="technologyTrack"></div>
+      </div>
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track slow" id="toolsTrack"></div>
+      </div>
+    </section>
+  </main>
+  <footer class="shell">
+    <span>© <span id="year"></span> Hakim Wiratama. Dibuat dengan sepenuh hati.</span>
+    <a href="index.html">Kembali ke beranda ↑</a>
+  </footer>
+  <script>
+    const backgroundPreferenceKey = "hakim-portfolio-background-choice";
+    const backgroundVideos = {
+      iblis: "iblis.mp4",
+      kesendirian: "Kesendirian.mp4",
+      malam: "Pemandagan%20Malam.mp4"
+    };
+    const backgroundVideo = document.querySelector("#backgroundVideo");
+    const videoBackground = document.querySelector(".video-background");
+    backgroundVideo.muted = true;
+    backgroundVideo.volume = 0;
+
+    let backgroundChoice = "iblis";
+    try {
+      const savedChoice = localStorage.getItem(backgroundPreferenceKey);
+      const savedChoiceMigration = {
+        nature: "iblis",
+        "video-15-08-37": "kesendirian",
+        "video-15-08-32": "malam"
+      };
+      backgroundChoice = savedChoiceMigration[savedChoice] || savedChoice || backgroundChoice;
+      if (backgroundChoice !== savedChoice && savedChoice !== null) {
+        localStorage.setItem(backgroundPreferenceKey, backgroundChoice);
+      }
+    } catch (error) {
+      console.error("Pilihan latar tersimpan tidak dapat dibaca:", error);
+    }
+
+    if (backgroundChoice !== "plain") {
+      const backgroundSource = backgroundVideos[backgroundChoice];
+      if (backgroundSource) {
+        backgroundVideo.src = backgroundSource;
+        videoBackground.classList.add("has-video");
+        backgroundVideo.addEventListener("loadeddata", () => {
+          backgroundVideo.muted = true;
+          backgroundVideo.volume = 0;
+          backgroundVideo.play().catch((error) => {
+            console.error("Video latar halaman proyek gagal diputar:", error);
+          });
+        });
+        backgroundVideo.addEventListener("error", () => {
+          videoBackground.classList.remove("has-video");
+          console.error(`Video latar halaman proyek gagal dimuat: ${backgroundSource}`);
+        });
+      } else {
+        console.error(`Pilihan latar tidak dikenal: ${backgroundChoice}`);
+      }
+    }
+
+    const storageKey = "hakim-portfolio-projects";
+    const projectPassword = "25092003";
+    let isProjectEditorUnlocked = false;
+    const projectUnlockForm = document.querySelector("#projectUnlockForm");
+    const projectPasswordInput = document.querySelector("#projectPassword");
+    const unlockStatus = document.querySelector("#unlockStatus");
+    const projectForm = document.querySelector("#projectForm");
+    const projectList = document.querySelector("#projectList");
+    const formStatus = document.querySelector("#formStatus");
+    const technologies = [
+      ["HTML", "Menyusun struktur halaman web"],
+      ["CSS", "Mengatur tampilan dan warna"],
+      ["JavaScript", "Menambahkan fitur interaktif"],
+      ["PHP", "Mengolah data di sisi server"],
+      ["MySQL", "Menyimpan dan mengelola data"],
+      ["React", "Membangun antarmuka web"],
+      ["Git", "Mencatat perubahan kode"],
+      ["GitHub", "Menyimpan dan berbagi kode"]
+    ];
+    const tools = [
+      ["Visual Studio Code", "Aplikasi untuk menulis kode"],
+      ["Figma", "Membuat desain tampilan"],
+      ["XAMPP", "Menjalankan web di komputer"],
+      ["Git", "Mengatur versi kode"],
+      ["GitHub", "Kolaborasi dan simpan proyek"],
+      ["Canva", "Membuat desain grafis"],
+      ["PHP", "Membuat fitur di sisi server"],
+      ["MySQL", "Mengatur database proyek"]
+    ];
+
+    function createMarqueeGroup(labels, accessible) {
+      const group = document.createElement("div");
+      group.className = "marquee-group";
+      if (!accessible) group.setAttribute("aria-hidden", "true");
+      labels.forEach(([label, description]) => {
+        const chip = document.createElement("div");
+        chip.className = "tool-chip";
+        const mark = document.createElement("span");
+        mark.setAttribute("aria-hidden", "true");
+        mark.textContent = "</>";
+        const copy = document.createElement("span");
+        copy.className = "tool-chip-copy";
+        const name = document.createElement("strong");
+        name.textContent = label;
+        const explanation = document.createElement("small");
+        explanation.textContent = description;
+        copy.append(name, explanation);
+        chip.append(mark, copy);
+        group.append(chip);
+      });
+      return group;
+    }
+
+    function fillMarquee(track, labels) {
+      track.append(createMarqueeGroup(labels, true), createMarqueeGroup(labels, false));
+    }
+
+    function setStatus(message, isError = false) {
+      formStatus.textContent = message;
+      formStatus.classList.toggle("error", isError);
+    }
+
+    function readProjects() {
+      const stored = localStorage.getItem(storageKey);
+      if (stored === null) return [];
+      const projects = JSON.parse(stored);
+      if (!Array.isArray(projects) || projects.some((project) =>
+        !project || typeof project.id !== "string" || typeof project.name !== "string" ||
+        typeof project.url !== "string" || typeof project.description !== "string" ||
+        !Array.isArray(project.technologies))) {
+        throw new Error("Data proyek yang tersimpan tidak valid.");
+      }
+      return projects;
+    }
+
+    function renderProjects(projects) {
+      projectList.replaceChildren();
+      if (projects.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        const title = document.createElement("strong");
+        title.textContent = "Belum ada proyek";
+        const hint = document.createElement("span");
+        hint.textContent = "Isi formulir di samping untuk menambahkan proyek pertamamu.";
+        empty.append(title, hint);
+        projectList.append(empty);
+        return;
+      }
+
+      projects.forEach((project, index) => {
+        const card = document.createElement("article");
+        card.className = "project-card";
+        const top = document.createElement("div");
+        top.className = "project-card-top";
+        const details = document.createElement("div");
+        const title = document.createElement("h3");
+        title.textContent = project.name;
+        const description = document.createElement("p");
+        description.textContent = project.description || project.url;
+        const number = document.createElement("span");
+        number.className = "project-number";
+        number.textContent = String(index + 1).padStart(2, "0");
+        details.append(title, description);
+        top.append(details, number);
+        const tags = document.createElement("div");
+        tags.className = "project-tech";
+        project.technologies.forEach((technology) => {
+          const tag = document.createElement("span");
+          tag.className = "tech-tag";
+          tag.textContent = technology;
+          tags.append(tag);
+        });
+        const actions = document.createElement("div");
+        actions.className = "project-card-actions";
+        const openLink = document.createElement("a");
+        openLink.className = "open-project";
+        openLink.href = project.url;
+        openLink.target = "_blank";
+        openLink.rel = "noopener noreferrer";
+        openLink.textContent = "Buka proyek ↗";
+        actions.append(openLink);
+        if (isProjectEditorUnlocked) {
+          const removeButton = document.createElement("button");
+          removeButton.className = "remove-project";
+          removeButton.type = "button";
+          removeButton.dataset.projectId = project.id;
+          removeButton.textContent = "Hapus";
+          actions.append(removeButton);
+        }
+        card.append(top, tags, actions);
+        projectList.append(card);
+      });
+    }
+
+    fillMarquee(document.querySelector("#technologyTrack"), technologies);
+    fillMarquee(document.querySelector("#toolsTrack"), tools);
+    document.querySelector("#year").textContent = new Date().getFullYear();
+
+    try {
+      renderProjects(readProjects());
+    } catch (error) {
+      renderProjects([]);
+      setStatus(`Proyek tidak dapat dimuat: ${error.message}`, true);
+    }
+
+    projectUnlockForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (projectPasswordInput.value !== projectPassword) {
+        unlockStatus.textContent = "Sandi salah. Silakan coba lagi.";
+        unlockStatus.classList.add("error");
+        projectPasswordInput.select();
+        return;
+      }
+
+      isProjectEditorUnlocked = true;
+      projectUnlockForm.hidden = true;
+      projectForm.hidden = false;
+      unlockStatus.textContent = "";
+      renderProjects(readProjects());
+      projectForm.querySelector("input").focus();
+    });
+
+    projectForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!isProjectEditorUnlocked) {
+        setStatus("Masukkan sandi untuk mengelola proyek.", true);
+        return;
+      }
+      const formData = new FormData(projectForm);
+      const name = String(formData.get("name")).trim();
+      const url = String(formData.get("url")).trim();
+      const description = String(formData.get("description")).trim();
+      const technologyList = String(formData.get("technologies"))
+        .split(",").map((technology) => technology.trim()).filter(Boolean);
+
+      try {
+        const parsedUrl = new URL(url);
+        if (!["http:", "https:"].includes(parsedUrl.protocol)) {
+          setStatus("Link harus menggunakan http:// atau https://.", true);
+          return;
+        }
+        const projects = readProjects();
+        projects.unshift({
+          id: globalThis.crypto.randomUUID(),
+          name,
+          url: parsedUrl.href,
+          description,
+          technologies: technologyList
+        });
+        localStorage.setItem(storageKey, JSON.stringify(projects));
+        renderProjects(projects);
+        projectForm.reset();
+        setStatus("Proyek berhasil disimpan di browser ini.");
+      } catch (error) {
+        setStatus(`Proyek gagal disimpan: ${error.message}`, true);
+      }
+    });
+
+    projectList.addEventListener("click", (event) => {
+      const button = event.target.closest(".remove-project");
+      if (!button || !isProjectEditorUnlocked) return;
+      try {
+        const projects = readProjects().filter((project) => project.id !== button.dataset.projectId);
+        localStorage.setItem(storageKey, JSON.stringify(projects));
+        renderProjects(projects);
+        setStatus("Proyek berhasil dihapus.");
+      } catch (error) {
+        setStatus(`Proyek gagal dihapus: ${error.message}`, true);
+      }
+    });
+
+    const menuButton = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector(".nav-links");
+    menuButton.addEventListener("click", () => {
+      const isOpen = navLinks.classList.toggle("open");
+      menuButton.setAttribute("aria-expanded", String(isOpen));
+      menuButton.setAttribute("aria-label", isOpen ? "Tutup menu" : "Buka menu");
+    });
+    navLinks.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("open");
+        menuButton.setAttribute("aria-expanded", "false");
+        menuButton.setAttribute("aria-label", "Buka menu");
+      });
+    });
+  </script>
+</body>
+</html>
