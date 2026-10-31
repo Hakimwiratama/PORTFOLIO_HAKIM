@@ -137,7 +137,10 @@
     .text-link:hover span { transform: translate(3px, -3px); }
 
     .hero-art { position: relative; width: 100%; height: clamp(440px, 45vw, 560px); min-height: 0; overflow: hidden; border: 1px solid rgba(255,255,255,.09); border-radius: 5px; background: #1b2018; }
-    .hero-portrait { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 48% 48%; }
+    .hero-portrait { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 48% 48%; transition: opacity 1.2s ease; }
+    .hero-portrait-secondary { opacity: 0; }
+    .hero-art.show-secondary .hero-portrait:first-of-type { opacity: 0; }
+    .hero-art.show-secondary .hero-portrait-secondary { opacity: 1; }
     .hero-art::before {
       position: absolute;
       z-index: 1;
@@ -296,6 +299,7 @@
       </div>
       <div class="hero-art reveal">
         <img class="hero-portrait" src="hakim-wiratama.jpeg" alt="Hakim Wiratama di tengah pemandangan alam">
+        <img class="hero-portrait hero-portrait-secondary" src="hakim-background.jpeg" alt="" aria-hidden="true">
         <span class="art-index">HAKIM WIRATAMA</span>
         <span class="art-label">Senang menjelajah dan menemukan inspirasi</span>
         <div class="hero-note">Terbuka untuk <strong>proyek baru</strong> ↗</div>
@@ -370,6 +374,8 @@
   <script>
     const menuButton = document.querySelector(".menu-toggle");
     const navLinks = document.querySelector(".nav-links");
+    const heroArt = document.querySelector(".hero-art");
+    const heroSecondPortrait = document.querySelector(".hero-portrait-secondary");
     const backgroundChoice = document.querySelector("#backgroundChoice");
     const videoStatus = document.querySelector("#videoStatus");
     const videoBackground = document.querySelector(".video-background");
@@ -380,6 +386,28 @@
       kesendirian: "Kesendirian.mp4",
       malam: "Pemandagan%20Malam.mp4"
     };
+    let heroSlideshowTimer = null;
+
+    function startHeroSlideshow() {
+      if (heroSlideshowTimer !== null) return;
+      heroSlideshowTimer = window.setInterval(() => {
+        heroArt.classList.toggle("show-secondary");
+      }, 120000);
+    }
+
+    if (heroSecondPortrait.complete) {
+      if (heroSecondPortrait.naturalWidth > 0) {
+        startHeroSlideshow();
+      } else {
+        console.error("Foto kedua slideshow hero tidak dapat dimuat.");
+      }
+    } else {
+      heroSecondPortrait.addEventListener("load", startHeroSlideshow, { once: true });
+      heroSecondPortrait.addEventListener("error", () => {
+        console.error("Foto kedua slideshow hero tidak dapat dimuat.");
+      }, { once: true });
+    }
+
     backgroundVideo.muted = true;
     backgroundVideo.volume = 0;
 
