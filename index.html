@@ -137,10 +137,10 @@
     .text-link:hover span { transform: translate(3px, -3px); }
 
     .hero-art { position: relative; width: 100%; height: clamp(440px, 45vw, 560px); min-height: 0; overflow: hidden; border: 1px solid rgba(255,255,255,.09); border-radius: 5px; background: #1b2018; }
-    .hero-portrait { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 48% 48%; transition: opacity 1.2s ease; }
-    .hero-portrait-secondary { opacity: 0; }
-    .hero-art.show-secondary .hero-portrait:first-of-type { opacity: 0; }
-    .hero-art.show-secondary .hero-portrait-secondary { opacity: 1; }
+    .hero-portrait { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 48% 48%; transform: translateX(0); transition: transform 1.2s ease; }
+    .hero-portrait-secondary { z-index: 0; transform: translateX(100%); }
+    .hero-art.show-secondary .hero-portrait:first-of-type { z-index: 0; transform: translateX(100%); }
+    .hero-art.show-secondary .hero-portrait-secondary { z-index: 1; transform: translateX(0); }
     .hero-art::before {
       position: absolute;
       z-index: 1;
@@ -392,7 +392,7 @@
       if (heroSlideshowTimer !== null) return;
       heroSlideshowTimer = window.setInterval(() => {
         heroArt.classList.toggle("show-secondary");
-      }, 20000);
+      }, 4000);
     }
 
     if (heroSecondPortrait.complete) {
