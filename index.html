@@ -220,8 +220,20 @@
     }
     @media (max-width: 760px) {
       .shell { width: min(100% - 36px, 540px); }
+      .topbar { border-bottom-width: 2px; }
+      .nav { min-height: 76px; }
+      .brand { font-size: 17px; }
+      .menu-toggle { width: 46px; height: 46px; font-size: 18px; }
+      .nav-links { top: 76px; }
+      .nav-links a { font-size: 14px; }
+      .eyebrow { font-size: 12px; }
+      .video-choice { font-size: 13px; }
+      .video-status { font-size: 12px; }
       .hero { min-height: auto; grid-template-columns: 1fr; gap: 48px; padding-block: 78px 72px; }
       .hero-art { min-height: 360px; }
+      .art-label { font-size: 11px; }
+      .art-index { font-size: 14px; }
+      .hero-note { font-size: 12px; }
       .hero-note { right: 10px; bottom: 20px; }
       .section { padding-block: 76px; }
       .section-heading { align-items: flex-start; flex-direction: column; margin-bottom: 32px; }
@@ -230,13 +242,13 @@
       .services { grid-template-columns: 1fr; }
       .service, .service + .service { border-left: 0; border-bottom: 1px solid var(--line); padding: 22px 0; }
       .service h3 { margin-top: 19px; }
+      .fact span, .service p, .contact p, footer { font-size: 12px; }
       .contact { min-height: 330px; }
     }
     @media (max-width: 420px) {
       .hero-actions { align-items: flex-start; flex-direction: column; gap: 17px; }
       .hero-art { height: min(132vw, 500px); }
       .facts { gap: 9px; }
-      .fact span { font-size: 10px; }
       footer { align-items: flex-start; flex-direction: column; justify-content: center; padding-block: 18px; }
     }
   </style>
